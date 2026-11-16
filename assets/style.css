@@ -87,6 +87,8 @@ body {
 .categories ul { margin: 0; padding-left: 20px; color: var(--muted); }
 .categories li { margin: 4px 0; }
 .categories strong { color: var(--text); font-weight: 600; }
+.comments { padding: 10px 0 30px; }
+.comments h2 { font-size: 20px; margin: 0 0 6px; }
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 20px 0 32px;

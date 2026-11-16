@@ -45,6 +45,16 @@
     <p>回头看看这一天：域名、博客、服务器、钱包、比赛，全线开花。累是真累，但每件都落了地。下一篇见。</p>
     <p><a href="../index.html">← 回到首页</a></p>
   </article>
+
+  <section class="comments">
+    <h2>评论</h2>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <div id="waline"></div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+      init({ el: '#waline', serverURL: 'https://waline-dusky-phi.vercel.app', lang: 'zh-CN', dark: 'auto' });
+    </script>
+  </section>
 </main>
 
 <footer class="site-footer">
