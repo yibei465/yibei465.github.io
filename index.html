@@ -24,19 +24,58 @@
     <p>把日子过成自己喜欢的样子。这里记点日常、想法，和一路上的小收获。</p>
   </section>
 
+  <div class="cat-filter" id="catFilter">
+    <button class="active" data-filter="all">全部</button>
+    <button data-filter="freebies">免费羊毛</button>
+    <button data-filter="vps">VPS/服务器</button>
+    <button data-filter="site">建站笔记</button>
+    <button data-filter="crypto">链上笔记</button>
+    <button data-filter="pitfalls">踩坑实录</button>
+    <button data-filter="life">碎碎念</button>
+  </div>
+
   <section class="post-list">
     <h2>最新文章</h2>
-    <article class="post-card">
-      <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <article class="post-card" data-cat="pitfalls">
+      <div class="meta"><time datetime="2026-11-17">2026 年 11 月 17 日</time><span class="chip">踩坑实录</span></div>
+      <h3><a href="posts/2026-11-17-pitfalls.html">踩坑实录（一）：这几天遇到的 8 个真实问题</a></h3>
+      <p>代理 CPU 跑满、伪装域名被阻断、改 DNS 要绑手机、登录被拒、注册被风控……全是实践里真踩过的，附原因和解法。</p>
+    </article>
+    <article class="post-card" data-cat="site freebies">
+      <div class="meta"><time datetime="2026-11-17">2026 年 11 月 17 日</time><span class="chip">建站笔记</span><span class="chip">免费羊毛</span></div>
       <h3><a href="posts/2026-11-17-recap.html">超长待机的一天：领域名、搭博客、修服务器</a></h3>
       <p>从昨晚到凌晨的折腾全记录：免费域名到手、博客上线、伦敦服务器抢修、链上小收获，还顺手打了场比赛。</p>
     </article>
-    <article class="post-card">
-      <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <article class="post-card" data-cat="life">
+      <div class="meta"><time datetime="2026-11-17">2026 年 11 月 17 日</time><span class="chip">碎碎念</span></div>
       <h3><a href="posts/hello.html">第一篇：我的博客开张了</a></h3>
       <p>今天给自己领了一个免费域名，博客就这么搭起来了。写下这第一篇，纪念一下开始。</p>
     </article>
   </section>
+
+  <section class="categories">
+    <h2>分类说明</h2>
+    <ul>
+      <li><strong>免费羊毛</strong>：能免费领的域名、VPS、服务和额度，附实测结果</li>
+      <li><strong>VPS/服务器</strong>：小机器的运维、代理和监控</li>
+      <li><strong>建站笔记</strong>：这个博客和以后其他站的搭建过程</li>
+      <li><strong>链上笔记</strong>：钱包操作、领取和打新的记录与复盘</li>
+      <li><strong>踩坑实录</strong>：实践中真实遇到的问题、原因和解法</li>
+      <li><strong>碎碎念</strong>：生活日常和随手记</li>
+    </ul>
+  </section>
+  <script>
+    document.getElementById('catFilter').addEventListener('click', function (e) {
+      if (e.target.tagName !== 'BUTTON') return;
+      this.querySelectorAll('button').forEach(function (b) { b.classList.remove('active'); });
+      e.target.classList.add('active');
+      var f = e.target.getAttribute('data-filter');
+      document.querySelectorAll('.post-card').forEach(function (card) {
+        var cats = (card.getAttribute('data-cat') || '').split(' ');
+        card.style.display = (f === 'all' || cats.indexOf(f) !== -1) ? '' : 'none';
+      });
+    });
+  </script>
 
   <section id="about" class="about">
     <h2>关于我</h2>

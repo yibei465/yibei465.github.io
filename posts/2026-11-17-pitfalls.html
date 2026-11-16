@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>踩坑实录（一）：这几天遇到的 8 个真实问题 · 以北的碎碎念</title>
+<meta name="description" content="搭博客、修服务器、注册账号过程中真实遇到的问题、原因和解决办法：代理 CPU 跑满、伪装域名被阻断、DNS 改不动、登录被拒、注册被风控……">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html">以北的碎碎念</a>
+    <nav>
+      <a href="../index.html">首页</a>
+      <a href="../index.html#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post">
+    <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <span class="chip">踩坑实录</span>
+    <h1>踩坑实录（一）：这几天遇到的 8 个真实问题</h1>
+    <p>这个分类专门记实践中真实碰到的问题——现象、原因、最后怎么解决的。都是这几天搭博客、修服务器、注册账号时一个一个踩过来的。</p>
+
+    <h3>1. 代理进程把 CPU 跑满了</h3>
+    <p><strong>现象：</strong>伦敦 VPS 上的 MTProto 代理（mtg）反复飙到 90% 以上 CPU，小机器差点被商家警告。</p>
+    <p><strong>原因：</strong>之前为了绕过 NAT 回环问题，把伪装域名在 hosts 里指回了本机，结果 mtg 每次连接都要拨自己的伪装域名，拨着拨着就连回自己，形成自连循环。</p>
+    <p><strong>解决：</strong>伪装域名换成一个真实的外部站点、删掉 hosts 指回；另外加了个看门狗脚本，每两分钟检查一次，进程死了自动拉起、CPU 异常自动重启。之后再没复发。</p>
+
+    <h3>2. 伪装域名选了 google.com，一关梯子就连不上</h3>
+    <p><strong>现象：</strong>代理开着梯子能用、关掉就连不上，服务器上看一切正常。</p>
+    <p><strong>原因：</strong>FakeTLS 的握手会露出 google.com 的 SNI，这个域名在国内会被阻断；开梯子时 SNI 藏在隧道里，所以「看起来正常」。</p>
+    <p><strong>解决：</strong>伪装域名换成 www.microsoft.com，国内直连可达，问题消失。教训：服务器侧测通 ≠ 国内直连能通。</p>
+
+    <h3>3. GNAME 改 DNS，必须先绑第二种验证</h3>
+    <p><strong>现象：</strong>给域名加解析记录，邮箱验证码输对了也被拒，提示必须再绑一种验证方式。</p>
+    <p><strong>原因：</strong>GNAME 的操作保护规则：只有邮箱验证时，敏感操作（改解析）不让过。</p>
+    <p><strong>解决：</strong>在账号安全里绑上手机验证，之后加记录一路畅通。顺带一提，它家的验证码邮件还进了 Gmail 的垃圾邮件箱，找了半天。</p>
+
+    <h3>4. Google 登录被拒：「无法验证此账号归您所有」</h3>
+    <p><strong>现象：</strong>在云浏览器里用 Google 账号登录数据库服务，密码没错也被 Google 拦下。</p>
+    <p><strong>原因：</strong>云浏览器的机房 IP + 陌生指纹，Google 风控直接判定高风险。</p>
+    <p><strong>解决：</strong>放弃 Google 一键登录，改用邮箱+密码直接注册，顺利通过。同类问题在 X 注册时也遇到了（见第 6 条）。</p>
+
+    <h3>5. GitHub 应用建不了仓库</h3>
+    <p><strong>现象：</strong>通过官方应用接口创建仓库，返回 403「Resource not accessible by integration」。</p>
+    <p><strong>原因：</strong>GitHub App 的权限范围不包含代建仓库。</p>
+    <p><strong>解决：</strong>在网页端手动建空仓库，再用接口推送文件——推送权限是有的。建仓和推文件是两套权限，记住了。</p>
+
+    <h3>6. X 注册最后一步被风控</h3>
+    <p><strong>现象：</strong>用 Google 账号注册 X，资料都填完，最后一步报「请尝试其他注册方式」，多试几次又变成「临时限制登录」。</p>
+    <p><strong>原因：</strong>还是云浏览器环境的问题，机房 IP 注册新号默认高风险，反复尝试只会加重限制。</p>
+    <p><strong>解决：</strong>停手等限制解除，改在自己手机的 X App 里用邮箱注册——真实设备和网络，风控等级完全不同。</p>
+
+    <h3>7. 博客的 HTTPS 证书迟迟不下来</h3>
+    <p><strong>现象：</strong>GitHub Pages 绑定自定义域名后，http 能打开，https 一直连不上。</p>
+    <p><strong>原因：</strong>证书由 GitHub 自动向 Let's Encrypt 申请，DNS 刚生效时签发会排队，慢的时候要等上几个小时。</p>
+    <p><strong>解决：</strong>不用管它，http 先用着，证书签好后 https 自动可用。着急的话可以去仓库的 Pages 设置里确认域名状态是否已通过检查。</p>
+
+    <h3>8. 订阅链接在国内拉不到</h3>
+    <p><strong>现象：</strong>把配置文件挂在一个海外文件托管链接上，自己测秒开，手机上导入却一直超时。</p>
+    <p><strong>原因：</strong>客户端是直连拉取订阅的，那个托管域名在国内访问不通；「我这边测着快」和「国内能打开」是两回事。</p>
+    <p><strong>解决：</strong>改成本地文件直接导入，或者换国内可达的托管方式。凡是给国内用的链接，必须以国内网络实测为准。</p>
+
+    <p>这一期的共性其实就一句话：<strong>很多问题不在配置本身，而在「你站在哪张网里测」。</strong>下一篇踩坑实录见。</p>
+    <p><a href="../index.html">← 回到首页</a></p>
+  </article>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Yibei Life · yibeilife.eu.cc</p>
+  </div>
+</footer>
+</body>
+</html>

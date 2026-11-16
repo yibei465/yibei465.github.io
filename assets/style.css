@@ -56,6 +56,37 @@ body {
 .post h1 { font-size: 28px; margin: 8px 0 20px; line-height: 1.4; }
 .post p { margin: 0 0 16px; }
 .post a { color: var(--accent); }
+.chip {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 1px 10px;
+  margin-left: 8px;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+.post-card .meta { margin-bottom: 4px; }
+.cat-filter { padding: 26px 0 2px; display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-filter button {
+  font: inherit;
+  font-size: 14px;
+  color: var(--muted);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 14px;
+  cursor: pointer;
+}
+.cat-filter button.active { color: #fff; background: var(--accent); border-color: var(--accent); }
+@media (prefers-color-scheme: dark) {
+  .cat-filter button.active { color: #1c1b18; }
+}
+.categories { padding: 8px 0 4px; }
+.categories ul { margin: 0; padding-left: 20px; color: var(--muted); }
+.categories li { margin: 4px 0; }
+.categories strong { color: var(--text); font-weight: 600; }
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 20px 0 32px;
