@@ -13,6 +13,7 @@
     <a class="logo" href="index.html">以北的碎碎念</a>
     <nav>
       <a href="index.html">首页</a>
+      <a href="#categories">分类</a>
       <a href="#about">关于</a>
     </nav>
   </div>
@@ -24,7 +25,9 @@
     <p>把日子过成自己喜欢的样子。这里记点日常、想法，和一路上的小收获。</p>
   </section>
 
-  <div class="cat-filter" id="catFilter">
+  <div class="cat-filter" id="categories">
+    <span class="cat-label">按分类看：</span>
+    <span id="catFilter" class="cat-buttons">
     <button class="active" data-filter="all">全部</button>
     <button data-filter="freebies">免费羊毛</button>
     <button data-filter="vps">VPS/服务器</button>
@@ -32,6 +35,7 @@
     <button data-filter="crypto">链上笔记</button>
     <button data-filter="pitfalls">踩坑实录</button>
     <button data-filter="life">碎碎念</button>
+    </span>
   </div>
 
   <section class="post-list">

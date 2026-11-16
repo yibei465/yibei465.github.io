@@ -68,7 +68,9 @@ body {
   white-space: nowrap;
 }
 .post-card .meta { margin-bottom: 4px; }
-.cat-filter { padding: 26px 0 2px; display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-filter { padding: 26px 0 2px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.cat-label { font-weight: 600; margin-right: 2px; }
+.cat-buttons { display: contents; }
 .cat-filter button {
   font: inherit;
   font-size: 14px;
