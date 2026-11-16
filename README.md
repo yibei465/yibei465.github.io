@@ -1,4 +1,4 @@
-# Yibei Life · 依贝的生活
+# 以北的碎碎念 · Yibei Life
 
 个人博客，托管在 GitHub Pages，域名 yibeilife.eu.cc。
 
