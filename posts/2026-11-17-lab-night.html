@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>深夜收尾：以北实验室开张，三个站全部 HTTPS · 以北的碎碎念</title>
+<meta name="description" content="凌晨四点的收尾工作：最后一张免费券注册了 yibeilab.eu.cc，以北实验室上线；三个站全部配上 HTTPS；状态页升级成总终端，一页看全所有服务。">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html">以北的碎碎念</a>
+    <nav>
+      <a href="../index.html">首页</a>
+      <a href="../index.html#categories">分类</a>
+      <a href="../index.html#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post">
+    <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <span class="chip">建站笔记</span><span class="chip">VPS/服务器</span>
+    <h1>深夜收尾：以北实验室开张，三个站全部 HTTPS</h1>
+    <p>凌晨四点，把今晚最后几件事收个尾：第三个域名到手、实验室开张、上一篇结尾悬着的 HTTPS 解决了、状态页升级成了总终端。一次记清。</p>
+
+    <h3>最后一张券，注册了 yibeilab.eu.cc</h3>
+    <p>GNAME 送的 3 张免费 .eu.cc 注册券，今晚用掉了最后一张：<strong>yibeilab.eu.cc</strong>，「以北实验室」。至此三个域名一套齐活——yibeilife 是博客，yibeiradar 是雷达，yibeilab 是实验室。都是 0 元注册、隐私保护开着、明年到期前免费续。选名字时纠结过要不要拿更短的本名，最后觉得实验室这个概念更对现在的阶段：东西还在一样一样往外搭，先有个「实验室」的筐装着。</p>
+
+    <h3>实验室是什么：一张项目总览页</h3>
+    <p>这段时间折腾出来的东西越来越多——博客、雷达、小游戏、社交账号、自建的代理和节点——散在各处，自己都快记不全了。实验室就是把它们收拢到一页：每个项目一张卡片，写清在干什么、现在是什么状态（运行中 / 参赛中 / 孵化中 / 内部运行），能点开的直接点开。最后还留了一张「下一个实验」的空卡片，算是个占位符，也是个提醒。地址：<strong>yibeilab.eu.cc</strong>，博客首页的友情链接里也加上了它，三个站互相串起来了。</p>
+
+    <h3>上一篇的尾巴解决了：三个站全部 HTTPS</h3>
+    <p>《博客搬家记》结尾留了个问题：那台机器的 443 端口被 Telegram 代理占着，网站的 HTTPS 没地方落。今晚的解法是<strong>让代理把 IPv6 的 443 让给网站</strong>：网站在 IPv6 上走标准 443、按域名分证书；代理退回只走 IPv4 入口，功能不受影响。三个站一起签了 Let's Encrypt 证书，http 自动跳 https。代价是代理少了一个 IPv6 入口——权衡过，网站的门面比代理多一条备用路重要。证书 2027 年 2 月中旬到期，手动流程签的、不会自动续，已经给自己设好提前提醒了。</p>
+
+    <h3>状态页升级：总终端</h3>
+    <p>原来只有一个看服务器死活的状态页，今晚扩成了「总终端」：顶部一眼看全——3 个站全部在线、5 个服务全部运行中；每个站带实时状态和证书剩余天数；服务列表补上了雷达和网站服务本身；连面板转发还差哪两条都标在清单里。数据由机器自己每 10 秒上报，不用登服务器就能知道全家桶的健康状况。运维这件事，<strong>看得见</strong>比什么都重要。</p>
+
+    <h3>还剩的小尾巴</h3>
+    <p>两个：雷达和实验室的 IPv4 入口还差去面板里补两条转发（不影响现在用手机流量访问，纯粹是洁癖项）；月底有个小的 IPv6 产品到期，要决定续不续——它要是断了，三个站的 IPv6 入口和 HTTPS 会一起受影响，所以大概率续。都记在账上了，不会忘。</p>
+
+    <p>从领第一个免费域名到今晚，整整一天把「一个人的小站群」搭出了雏形：三个站、一台 128 MB 内存的小机器、全套自建服务。成本几乎为零，快乐是真的。收工，睡觉。</p>
+
+    <p><a href="../index.html">← 回到首页</a></p>
+  </article>
+
+  <section class="comments">
+    <h2>评论</h2>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <div id="waline"></div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+      init({ el: '#waline', serverURL: 'https://waline-dusky-phi.vercel.app', lang: 'zh-CN', dark: 'auto' });
+    </script>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Yibei Life · yibeilife.eu.cc</p>
+  </div>
+</footer>
+</body>
+</html>
