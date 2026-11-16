@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>博客搬家记：从 GitHub Pages 搬回自己的小服务器 · 以北的碎碎念</title>
+<meta name="description" content="博客在国内不挂梯子打不开，折腾一圈 Cloudflare 之后，干脆跟雷达一样搬回自己的小服务器：IPv6 直连、nginx 分流、NAT 端口的坑，一次记清。">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html">以北的碎碎念</a>
+    <nav>
+      <a href="../index.html">首页</a>
+      <a href="../index.html#categories">分类</a>
+      <a href="../index.html#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post">
+    <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <span class="chip">建站笔记</span><span class="chip">VPS/服务器</span>
+    <h1>博客搬家记：从 GitHub Pages 搬回自己的小服务器</h1>
+    <p>博客上线第一天就发现一个尴尬的问题：在国内不挂梯子打不开。这篇记一下今晚的搬家全过程——试错、换思路、踩坑，最后落地。</p>
+
+    <h3>病根：不是博客的问题，是「房东」的问题</h3>
+    <p>博客原来托管在 GitHub Pages 上，文件本身一切正常，但 GitHub 的那几个 IP 在国内访问会被干扰。访客连不上，跟内容、跟配置都没关系，纯粹是住址不好。所以思路很明确：<strong>换个住址</strong>。</p>
+
+    <h3>第一次尝试：套 Cloudflare，卡在人机验证</h3>
+    <p>最常规的解法是给域名套一层 Cloudflare。但注册和登录都卡在它的机器人验证上，转圈半天过不去，亲自上手试了也不行。耗了一个多小时，果断放弃——工具是为人服务的，不能反过来被工具耗着。</p>
+
+    <h3>换思路：学雷达，搬回自己的服务器</h3>
+    <p>我的资源雷达（yibeiradar.eu.cc）一直不用梯子就能进，因为它不住在任何大厂的 IP 上，就跑在我自己的一台伦敦小服务器上，走 IPv6 直连。那博客也照办：把静态文件搬到同一台机器，解析指过去。搬完实测：关掉 WiFi 用 5G，不挂梯子，秒开。</p>
+
+    <h3>坑一：80 端口只有一个，两个站要排队</h3>
+    <p>那台机器的 80 端口已经被雷达占着，博客总不能也挤同一个门。解法是装一个 nginx 当前台：请求进来先看你要找哪个域名，再分给后面的雷达或博客。雷达挪到内部端口继续跑，用户那边毫无感知，两个站共用一个入口。</p>
+
+    <h3>坑二：文件拷过去了，却报 403</h3>
+    <p>博客文件传上服务器，本地测却返回 403 Forbidden。原因是复制过去的文件权限太严，nginx 的运行用户读不了。把文件改成公开可读就好了——很小的问题，但不报错细节的话能查半天。</p>
+
+    <h3>坑三：NAT 会把域名「吃掉」</h3>
+    <p>这是今晚最长见识的一个。这台是 NAT 小鸡，IPv4 靠端口转发。实测发现：从 IPv4 转发进来的请求，域名信息会被网关改写成服务器 IP——nginx 根本不知道你敲的是哪个域名，没法分流。结论是<strong>一个外部端口只能serve一个站</strong>：博客的 IPv4 入口用了一个单独端口（所以 WiFi 下打开要带 :9214），雷达的 IPv4 入口也预留好了另一个端口，等我把转发加上就通。</p>
+    <p>顺带把一个老问题想通了：为什么这种小鸡的网址总要带端口——因为它没有自己的门牌号，只能借大楼的侧门。想网址干净，就得买带<strong>独立 IPv4</strong> 的正经 VPS；再便宜的 NAT 小鸡也不行，这条以后买机器先看。</p>
+
+    <h3>搬完的结果</h3>
+    <p>现在博客有两个入口，都实测通过：有 IPv6 的网络（比如 5G）直接开 <strong>yibeilife.eu.cc</strong>；普通 WiFi 用 <strong>yibeilife.eu.cc:9214</strong>。雷达照常运行，没受影响。GitHub 仓库保留作源码备份，以后更新文章两边同步。</p>
+    <p>还剩一个小尾巴：HTTPS 没配上——这台机器的 443 端口被 Telegram 代理占着，证书只能挂到别的端口，又回到带端口的老问题。不急，等以后换到独立 IP 的机器，一次到位。</p>
+
+    <p><a href="../index.html">← 回到首页</a></p>
+  </article>
+
+  <section class="comments">
+    <h2>评论</h2>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <div id="waline"></div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+      init({ el: '#waline', serverURL: 'https://waline-dusky-phi.vercel.app', lang: 'zh-CN', dark: 'auto' });
+    </script>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Yibei Life · yibeilife.eu.cc</p>
+  </div>
+</footer>
+</body>
+</html>
