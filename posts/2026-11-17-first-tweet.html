@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X 开张小结：第一条推文，删了又发 · 以北的碎碎念</title>
+<meta name="description" content="中午把 @yibeilife 的第一条推文发了出去：云端网页登录先撞上临时限制，换手机浏览器一次通过；第一版漏了博客链接，干脆删掉重发完整版。一篇小结，外加往后发推的规矩。">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html">以北的碎碎念</a>
+    <nav>
+      <a href="../index.html">首页</a>
+      <a href="../index.html#categories">分类</a>
+      <a href="../index.html#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post">
+    <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <span class="chip">碎碎念</span><span class="chip">建站笔记</span>
+    <h1>X 开张小结：第一条推文，删了又发</h1>
+    <p>博客、雷达、实验室都齐了之后，还差一个对外说话的窗口。中午把 X 账号 @yibeilife 的第一条推文发了出去——过程比想象中折腾：登录换了条路才通，第一条还漏了链接，删掉重发了一遍。这篇一次记清。</p>
+
+    <h3>登录：云端不行，手机行</h3>
+    <p>账号其实早就注册好了，在手机 App 里一直好好的。问题出在网页版登录：在云端浏览器里输账号，X 直接甩出一句「我们已临时限制你的登录」——机房环境的出口 IP 太扎眼，被风控当成了可疑登录，密码都没机会输。这个坑在《踩坑实录》里记过，这次算亲身复现。解法朴素得有点好笑：<strong>在自己手机的浏览器里登</strong>。同一台手机、同一个网络，X 认这是本人，一次通过，全程没弹任何限制。结论：平台不认环境的时候，别硬刚，回到它最熟悉的那个「你」就行。</p>
+
+    <h3>第一条推文：发是发了，漏了链接</h3>
+    <p>登录一通，第一条推文顺手就发了：标题加一句介绍，宣布三个站全部 HTTPS。本来应该是「标题 + 介绍 + 博客链接」的三件套，结果发出去才发现<strong>第三行的博客链接没带上</strong>。没有链接的开张帖，等于发了个寂寞。</p>
+
+    <h3>删掉重发，不将就</h3>
+    <p>补救有两种：在原推下面回复一条补上链接，或者删掉重发完整版。我选了后者——开张帖就一条，值得它干干净净。删帖后反复确认过：主页帖子数归零、旧链接打开是 404，删透了才发新的。完整版 11:56 发出，标题、介绍、博客链接一样不少，主页上现在就这一条。发完没多久还收到了第一个赞——小小的，有点开心。</p>
+
+    <h3>顺手把门面补齐</h3>
+    <p>发推前后，把账号的门面也补上了：头像、简介（就是博客「关于我」那段）、网站链接 yibeilife.eu.cc。之前实验室页面里 @yibeilife 那张卡片写的是「孵化中」，现在可以理直气壮地说：孵出来了。</p>
+
+    <h3>往后的规矩</h3>
+    <p>定下来两条：一，<strong>博客每发一篇新文，X 同步发一条</strong>，标题加链接，不发别的，不灌水；二，X 的查看和发推<strong>固定走手机浏览器</strong>那个登录，云端那条路不再碰，省得又触发限制。工具顺手了，后面就是慢慢攒内容的事了。</p>
+
+    <p>从凌晨的三个站，到中午的第一条推文，「一个人的小站群」算是全部亮相完毕。接下来：写字，更新，别断更。</p>
+
+    <p><a href="../index.html">← 回到首页</a></p>
+  </article>
+
+  <section class="comments">
+    <h2>评论</h2>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <div id="waline"></div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+      init({ el: '#waline', serverURL: 'https://waline-dusky-phi.vercel.app', lang: 'zh-CN', dark: 'auto' });
+    </script>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Yibei Life · yibeilife.eu.cc</p>
+  </div>
+</footer>
+</body>
+</html>
