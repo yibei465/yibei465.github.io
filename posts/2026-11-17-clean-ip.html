@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>网站在移动打不开：一晚上试了五种办法 · 以北的碎碎念</title>
+<meta name="description" content="刚搬到香港，移动网络就打不开自己的网站，宽带却没事。套 Cloudflare 抽了一晚上奖，最后翻出一个以为早就退掉的专属 IP，用 WireGuard 隧道引到香港机上，四个站才算真正落地。">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html">以北的碎碎念</a>
+    <nav>
+      <a href="../index.html">首页</a>
+      <a href="../index.html#categories">分类</a>
+      <a href="../index.html#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post">
+    <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <span class="chip">VPS·服务器</span>
+    <h1>网站在移动打不开：一晚上试了五种办法</h1>
+    <p>上一篇还在庆祝安家香港，博文刚发出去没多久，晚上就发现：手机用移动网络打开任何一个站，全是空白；换到宽带，又一切正常。刚搬完家，凳子还没坐热，新麻烦就来了。</p>
+
+    <h3>先定位：被掐的是"网站流量"，不是服务器</h3>
+    <p>翻服务器日志看得很清楚：手机的请求能到，HTTP 的跳转也回了，但一跳到 HTTPS 那一步就被掐断，页面自然一片空白。同一台机器、同一个 IP，我的梯子却活得好好的——后来想明白了：这种干扰是按「IP + 端口 + 域名」的组合挑着掐的，专打看起来像正经网站的流量；梯子换了端口、顶着大站的门面、全程加密，不在这个打击面上。</p>
+    <p>而香港这台机的老 IP，身上同时跑着网站、梯子和 Telegram 代理，是个被盯上的「体质」。这才是病根。</p>
+
+    <h3>第二步：套 Cloudflare，结果抽了一晚上奖</h3>
+    <p>常规解法是躲到 Cloudflare 后面，让访客连它的节点。套上之后雷达先通了，博客和实验室却时好时坏。一晚上把能试的都试了：把解析指到雷达那组能通的 IP，边缘直接回 403；想借雷达的入口给其他站做自定义主机名，开通要先绑银行卡，放弃；把站点删掉重新添加，分到的 IP 一个没变。最后实验室的老地址自己又活了，雷达反倒进不去——这才确认，移动对 Cloudflare 的干扰是阵发性的，通不通全看当时路由的脸色，跟抽奖一样。</p>
+
+    <h3>转机：一个以为早就没了的 IP</h3>
+    <p>冷静下来想起伦敦那会儿：博客在 GitHub Pages 上打不开，搬到自己的服务器直连就好了——干净的 IP 没人盯。顺着这个思路翻了翻面板，发现美国机那块专属 IP 居然还在：当时以为跟 VM 一起退掉了，其实它是独立产品，VM 没了，它还剩一个月躺在那儿，状态正常。</p>
+
+    <h3>方案：用隧道把干净 IP「引」到香港</h3>
+    <p>这个 IP 是英国的，没法直接绑到香港的机器上，但它支持 WireGuard 独立直连。于是给香港机拉了一条 WireGuard 隧道，把这个 IP 落在它身上，再做策略路由：网站流量走新 IP 进出，梯子继续留在老 IP 上，各走各的门，互不牵连。四个站的解析全部切到新 IP，直连，不再绕 CDN。</p>
+
+    <h3>中间还被自己的测试坑了两次</h3>
+    <p>第一次，我拿着 IP 地址当网址输进浏览器，看到 404 就以为没通——其实一台服务器上住着四个站，全靠域名分房，报 IP 进门它根本不知道你要找谁，404 是必然的。第二次，手机里新旧两套解析缓存打架：同一个微信，这个窗口打开是好的，换个窗口就是空白，日志里两条路径看得明明白白。排查这种问题，先翻服务器日志最靠谱：请求到没到、走到哪一步断的，一目了然，比对着空白页猜强多了。</p>
+
+    <h3>结局</h3>
+    <p>折腾到快十点，移动网络不挂梯子，博客、实验室、雷达、短链四个站全部能打开，伦敦时期的直连方案算是换了个姿势复活了。</p>
+    <p>这一晚的心得有三条。一是干净 IP 是稀缺资源，别把网站和梯子挤在同一个 IP 上，被盯上就是一锅端；二是 CDN 不是万能药，共享 IP 池的脸色谁都说不准；三是出问题先看日志再动手，今晚至少有一半时间，浪费在跟自己的测试方法和缓存较劲上。</p>
+    <p><a href="../index.html">← 回到首页</a></p>
+  </article>
+
+  <section class="comments">
+    <h2>评论</h2>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <div id="waline"></div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+      init({ el: '#waline', serverURL: 'https://waline-dusky-phi.vercel.app', lang: 'zh-CN', dark: 'auto' });
+    </script>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Yibei Life · yibeilife.eu.cc</p>
+  </div>
+</footer>
+</body>
+</html>
