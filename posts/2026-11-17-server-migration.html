@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>服务器被关停之后：一下午搬进美国新家 · 以北的碎碎念</title>
+<meta name="description" content="下午五点多，伦敦那台小服务器被商家直接关停，四个站一起失联。好在专属 IP 能跟着走：换台美国新机、把 IP 重新一绑，域名解析一个字没改，一下午全部恢复。顺带预告正在打的下一场比赛。">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html">以北的碎碎念</a>
+    <nav>
+      <a href="../index.html">首页</a>
+      <a href="../index.html#categories">分类</a>
+      <a href="../index.html#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post">
+    <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <span class="chip">VPS/服务器</span><span class="chip">建站笔记</span>
+    <h1>服务器被关停之后：一下午搬进美国新家</h1>
+    <p>下午五点多，博客、雷达、实验室、短链，四个站一起打不开了。一查：伦敦那台小服务器被商家关停了。其实早有预兆——前一天商家就发过通知，宿主机换了架构之后对长期高占用的机器会直接处理。那台 128 MB 内存的小鸡折腾得太狠，终究是没扛住。</p>
+
+    <h3>先盘点：什么没了，什么还在</h3>
+    <p>机器没了不等于全没了。博客的源码在 GitHub 和本地各有一份，实验室、短链的源码都在本地，订阅文件的主副本也在本地，评论系统跑在别家的免费服务上、压根不在这台机器里。真正丢掉的是雷达攒了半天的数据（数据库在机器上，没来得及备份）、四个站的证书、还有梯子和代理的密钥——这些只能重建，不能恢复。结论：<strong>能重建的都不是大事，丢数据的才是教训。</strong>雷达的数据备份，这次记在账上了。</p>
+
+    <h3>救命的一步：专属 IP 跟着走</h3>
+    <p>新家还是同一家商家，美国洛杉矶，1.25 美元一个月，内存比伦敦那台还小一点。真正的关键在 IP：上午刚买的那个专属 IPv4 本来是绑在伦敦机上的，直接在面板里改绑到美国新机——<strong>四个站的域名解析一个字都不用改</strong>，全世界缓存里指着的还是同一个 IP，IP 背后换了台机器而已。顺手把指向旧机器的 IPv6 记录清掉、给雷达补了个 www 记录，DNS 这块就干净了。</p>
+
+    <h3>重建清单：一下午从零搭回全套</h3>
+    <p>新机器是块白板，从装环境开始：网站服务、梯子（VLESS+Reality，换了新密钥）、Telegram 代理（新链接）、看门狗，四个站重新部署。证书这次走自动签发——专属 IP 直通 80 端口，验证一步到位，而且配上了<strong>自动续期</strong>，不用再像上次那样手动签、还得给自己设定时提醒。雷达从零重新采集，AI 审核重新配好，第一批 200 条审完留下一半；状态页「以北总终端」也切到了新机器，6 个服务、4 个站点、证书剩余天数，全是实时的。</p>
+
+    <h3>顺带搞懂：专属 IP 不用开端口</h3>
+    <p>《博客搬家记》里折腾过的 NAT 转发，这次彻底告别了：NAT 入口的每个端口都要去面板里单独映射，而专属 IP 是整段直通机器的——什么服务在听，外面就能直接连，不用开端口。以前要带一串怪端口才能访问的日子，一去不返。那个 NAT 入口现在只留了一条 SSH 备用通道，图个保险。</p>
+
+    <h3>下一件事：代币雷达赛</h3>
+    <p>站群刚安顿好，下一场比赛已经开工了：make.fun 的「代币雷达赛」，奖池 1,325 美元，12 月 14 日截止。题目是做一个雷达——从 758 个协议的公开数据里，算出哪些还没发币的协议最值得提前埋伏：用同类已发币协议的市值倍数、TVL、增长和运行年头推出一个隐含价值排名，再给每个协议配上具体的埋伏步骤。评委是 AI，看作品的完整度打分。现在程序和页面都在搭了，进展会同步到实验室。</p>
+
+    <p>一天之内，家被拆了，又在另一个大洲重建好了。折腾的快乐没变，抗风险能力倒是实打实涨了一截：源码多地备份、IP 与机器解耦、证书自动续期——下次再出事，恢复只会更快。</p>
+
+    <p><a href="../index.html">← 回到首页</a></p>
+  </article>
+
+  <section class="comments">
+    <h2>评论</h2>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <div id="waline"></div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+      init({ el: '#waline', serverURL: 'https://waline-dusky-phi.vercel.app', lang: 'zh-CN', dark: 'auto' });
+    </script>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Yibei Life · yibeilife.eu.cc</p>
+  </div>
+</footer>
+</body>
+</html>
