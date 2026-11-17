@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给网站装上第二条腿：IPv6 双栈落地 · 以北的碎碎念</title>
+<meta name="description" content="伦敦那条 IPv4 路虽然通了，但绕远、还怕移动宽带不买账。翻出一个差点被忘掉的新加坡 IPv6 小产品，用同样的隧道手法引到香港机上，四个站自此双栈并行；顺手把状态终端升级成了探针面板。">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html">以北的碎碎念</a>
+    <nav>
+      <a href="../index.html">首页</a>
+      <a href="../index.html#categories">分类</a>
+      <a href="../index.html#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post">
+    <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <span class="chip">VPS·服务器</span>
+    <h1>给网站装上第二条腿：IPv6 双栈落地</h1>
+    <p>上一篇的结尾，四个站靠一个英国 IP 复活了，但留了个尾巴：那条路要绕伦敦，一圈下来一秒多；用测速工具一测，移动的节点还一片超时——虽然自己的 5G 能打开，心里总归不踏实。一条腿走路，瘸。</p>
+
+    <h3>老经验：IPv6 当年救过雷达</h3>
+    <p>想起伦敦时期的一件事：那会儿雷达就是靠 IPv6 直连活下来的，IPv4 被干扰的时候，它在 5G 上照样打开。移动的 5G 本身就带 IPv6，这条路对手机用户其实是现成的。那就给四个站都装上第二条腿：IPv6。</p>
+
+    <h3>现实：香港机没 IPv6，但箱底有存货</h3>
+    <p>查了一圈，香港这台机压根没有 IPv6，商家没给。正要放弃，又翻出一个差点被忘掉的小产品：之前在同一家买的一个新加坡 IPv6 地址段，0.25 美元一个月，月底就到期，一直闲置。今晚是第二次靠「以为没了的东西」救场了——上一篇是英国的 IPv4，这次是新加坡的 IPv6。</p>
+
+    <h3>施工：同一套隧道手法，再来一遍</h3>
+    <p>办法和引 IPv4 时一模一样：给香港机再拉一条 WireGuard 隧道，把这个 IPv6 地址段落在本机上，策略路由只管网站流量，梯子继续走它自己的门。然后给网站服务开 IPv6 监听，最后在域名解析里给四个站各加一条 AAAA 记录。</p>
+    <p>中间出了个小插曲：改服务器配置时手滑写错了一处，新配置没通过自检——好在动手前留了备份、改完先测试才加载，正式服务一秒没断，原样恢复后重来一遍就对了。这种「先备份、后测试、再上线」的顺序，今晚又救了我一次。</p>
+    <p>还有个原则问题：加 AAAA 的时候，**原来的 A 记录一条都不删**。双栈的意思就是两扇门并存：有 IPv6 的设备走新门，没有的继续走老门；哪扇门临时出问题，另一扇还在。这和把所有鸡蛋放一个篮子正好相反。</p>
+
+    <h3>顺手：把状态终端升级成了探针</h3>
+    <p>今晚被「到底通没通」折腾了太多次，干脆把之前的服务器状态页升级成了探针式面板：CPU、内存、网速、隧道状态全是实时的；四个站每半分钟走一遍**真实的公网路径**自检（和访客打开的路径一模一样），延迟多少毫秒都写在脸上；还存了最近 20 分钟的曲线。以后再有人问「网站是不是挂了」，打开面板看一眼就行，不用猜。</p>
+
+    <h3>结果</h3>
+    <p>IPv6 路径全线打通：从公网走一整圈只要 0.13 秒，比伦敦那条 1.5 秒以上的路快了一个量级；手机 5G 实测，四个站打开正常。现在的格局是：网站有 IPv4、IPv6 两条腿，梯子和网站各用各的 IP，探针在面板上盯着——今晚从服务器被关停开始的一整串折腾，到这里才算真正收官。</p>
+    <p>最后留一句给以后的自己：便宜小产品别急着扔、别急着忘，英国 IPv4 和新加坡 IPv6 今晚轮流救场，全是当初随手买下的「闲置资产」；但闲置不等于不用管，这两个小产品一个 12 月中旬到期、一个月底就到期，日子都记在提醒里了。资产可以闲置，账不能糊涂。</p>
+    <p><a href="../index.html">← 回到首页</a></p>
+  </article>
+
+  <section class="comments">
+    <h2>评论</h2>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <div id="waline"></div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+      init({ el: '#waline', serverURL: 'https://waline-dusky-phi.vercel.app', lang: 'zh-CN', dark: 'auto' });
+    </script>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Yibei Life · yibeilife.eu.cc</p>
+  </div>
+</footer>
+</body>
+</html>
