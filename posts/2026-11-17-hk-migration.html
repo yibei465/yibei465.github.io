@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>一天三搬：从伦敦关停，到安家香港 · 以北的碎碎念</title>
+<meta name="description" content="一天之内搬了三次家：伦敦小机被商家关停，美国机紧急重建，最后整机搬到香港。雷达数据一条没丢，梯子和代理原样搬家，只换了个地址。">
+<link rel="stylesheet" href="../assets/style.css?v=4">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../index.html">以北的碎碎念</a>
+    <nav>
+      <a href="../index.html">首页</a>
+      <a href="../index.html#categories">分类</a>
+      <a href="../index.html#about">关于</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <article class="post">
+    <time datetime="2026-11-17">2026 年 11 月 17 日</time>
+    <span class="chip">VPS·服务器</span>
+    <h1>一天三搬：从伦敦关停，到安家香港</h1>
+    <p>这一天过得像搬家公司连轴转：下午被迫搬、傍晚临时搬、晚上主动搬。最后总算在香港安顿下来，把过程记一笔，省得以后再踩同样的坑。</p>
+
+    <h3>第一搬：伦敦小机说没就没</h3>
+    <p>下午，伦敦那台小机被商家直接关停，没预告，没抢救窗口。博客、实验室、雷达、短链四个站一起失联，梯子和 Telegram 代理也跟着断了。</p>
+    <p>唯一值得庆幸的是：博客源码在 GitHub 和本地都有，雷达和各站的数据平时也有备份。机器没了是真没了，但东西一篇没丢。这件事再次说明，便宜小商家随时可能跑路，数据攥在自己手里才是正经事。</p>
+
+    <h3>第二搬：美国机紧急重建</h3>
+    <p>先求活命。用同一家独角鲸云的美国机顶上，靠之前买的专属 IP 改绑过去：域名解析一个字不用改，当晚四个站全部复活，证书还顺手配上了自动续期。</p>
+    <p>但这台美国机有个硬伤：内存只有 200MB。一堆服务全挤进去，直接跑满，平时只剩几十兆，网站一阵一阵地卡。能用，但住得憋屈。</p>
+
+    <h3>插曲：阿里云那台 68 元/年的，要不要？</h3>
+    <p>中间还对比过阿里云轻量云的伦敦机，68 元一年、配置看着很香。但想了想还是没拿它当主力：大厂账号是实名的，平台对代理这类用途的风控也严，真出问题牵连的是整个账号。它更适合放正经网站，主力梯子还是用小商家、按月付、坏了就换，心里踏实。</p>
+
+    <h3>第三搬：安家香港，整机搬运</h3>
+    <p>傍晚拍板升级：新购了 ZoroCloud 的香港机 HK-BGP-Mini，29.80 元一个月，1 核 1GB 内存、20GB 硬盘、每月 1TB 流量。月付试错，不好用随时走人。</p>
+    <p>这次和伦敦那回完全不一样。美国机还活着，所以是「整机搬运」而不是「废墟抢救」：雷达攒下的 761 条数据一条不少，短链、令牌、证书全量复制，梯子和 Telegram 代理的密钥原样搬过去，只换了一个新地址。最后把域名解析切到香港，四个站全绿。</p>
+
+    <h3>住进去的体感</h3>
+    <p>变化最明显的是延迟。美国机那会儿是 140 到 180 毫秒，现在香港机是几十毫秒的级别，点开页面明显跟手了。内存也从只剩 77MB 变成剩 600 多 MB，雷达跑采集和审核的时候，其他服务再也不用跟着喘。状态总终端也切到了新机，打开就能看香港机的实时健康。</p>
+    <p>美国机先不退，留作备份到 12 月 17 日。这几天重点测一下晚高峰的速度，香港这条是普通 BGP 线路，不是精品线，高峰期顶不顶得住还得实测。测完再决定它的去留。</p>
+
+    <p>一天搬三家，最后的心得就一句：机器可以随便换，数据和配置必须永远有备份、有退路。这样商家再怎么折腾，搬家也就是一下午的事。</p>
+    <p><a href="../index.html">← 回到首页</a></p>
+  </article>
+
+  <section class="comments">
+    <h2>评论</h2>
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css">
+    <div id="waline"></div>
+    <script type="module">
+      import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+      init({ el: '#waline', serverURL: 'https://waline-dusky-phi.vercel.app', lang: 'zh-CN', dark: 'auto' });
+    </script>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>© 2026 Yibei Life · yibeilife.eu.cc</p>
+  </div>
+</footer>
+</body>
+</html>
